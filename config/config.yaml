@@ -1,0 +1,92 @@
+# Jira/Confluence Scraper Configuration
+# 이 파일을 편집하여 스크래핑 설정을 구성하세요.
+
+# 서버 설정
+server:
+  # 서버 타입 (cloud: Atlassian Cloud, server: Self-hosted)
+  type: "cloud"
+
+  # Jira 기본 URL (예: https://yourcompany.atlassian.net)
+  jira_base_url: "https://yourcompany.atlassian.net"
+
+  # Confluence 기본 URL (예: https://yourcompany.atlassian.net/wiki)
+  confluence_base_url: "https://yourcompany.atlassian.net/wiki"
+
+# 사용자 정보
+user:
+  # Atlassian Account ID
+  # 확인 방법: Jira 프로필 → Account Settings → URL에서 확인
+  account_id: "your-account-id-here"
+
+  # 표시 이름 (CSV에 표시될 이름)
+  display_name: "홍길동"
+
+# Jira 수집 설정
+jira:
+  # Jira 수집 활성화
+  enabled: true
+
+  # 수집할 프로젝트 키 목록 (빈 배열 = 모든 프로젝트)
+  # 예: ["PROJ1", "PROJ2"]
+  projects: []
+
+  # 수집 시작 날짜 (YYYY-MM-DD 형식, null = 제한 없음)
+  date_from: "2024-01-01"
+
+  # 수집 종료 날짜 (YYYY-MM-DD 형식, null = 현재까지)
+  date_to: null
+
+  # 코멘트 정보 포함 여부
+  include_comments: true
+
+  # 에픽 이름 조회 여부 (추가 API 호출 필요)
+  resolve_epics: true
+
+  # 스프린트 정보 조회 여부
+  resolve_sprints: true
+
+# Confluence 수집 설정
+confluence:
+  # Confluence 수집 활성화
+  enabled: true
+
+  # 수집할 스페이스 키 목록 (빈 배열 = 모든 스페이스)
+  # 예: ["DEV", "ARCH"]
+  spaces: []
+
+  # 수집 시작 날짜 (YYYY-MM-DD 형식, null = 제한 없음)
+  date_from: "2024-01-01"
+
+  # 수집 종료 날짜 (YYYY-MM-DD 형식, null = 현재까지)
+  date_to: null
+
+  # 페이지 본문 포함 여부
+  include_content: true
+
+# 출력 설정
+output:
+  # CSV 파일 출력 디렉토리
+  directory: "./output"
+
+  # CSV 파일 인코딩 (utf-8-sig: Excel 호환, utf-8: 일반)
+  encoding: "utf-8-sig"
+
+  # 날짜 형식 (strftime 포맷)
+  date_format: "%Y-%m-%d"
+
+# 실행 설정
+execution:
+  # 초당 API 요청 수 (Rate Limiting)
+  rate_limit_per_second: 3
+
+  # 페이지당 항목 수
+  page_size: 50
+
+  # 최대 재시도 횟수
+  max_retries: 3
+
+  # 요청 타임아웃 (초)
+  timeout_seconds: 30
+
+  # 로그 레벨 (DEBUG, INFO, WARNING, ERROR)
+  log_level: "INFO"
