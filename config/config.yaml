@@ -7,19 +7,19 @@ server:
   type: "cloud"
 
   # Jira 기본 URL (예: https://yourcompany.atlassian.net)
-  jira_base_url: "https://yourcompany.atlassian.net"
+  jira_base_url: "https://rbh-kr.atlassian.net"
 
   # Confluence 기본 URL (예: https://yourcompany.atlassian.net/wiki)
-  confluence_base_url: "https://yourcompany.atlassian.net/wiki"
+  confluence_base_url: "https://rbh-kr.atlassian.net/wiki"
 
 # 사용자 정보
 user:
   # Atlassian Account ID
   # 확인 방법: Jira 프로필 → Account Settings → URL에서 확인
-  account_id: "your-account-id-here"
+  account_id: "6181d914327da400699a2ca5"
 
   # 표시 이름 (CSV에 표시될 이름)
-  display_name: "홍길동"
+  display_name: "장우영"
 
 # Jira 수집 설정
 jira:
@@ -31,7 +31,7 @@ jira:
   projects: []
 
   # 수집 시작 날짜 (YYYY-MM-DD 형식, null = 제한 없음)
-  date_from: "2024-01-01"
+  date_from: "2022-01-01"
 
   # 수집 종료 날짜 (YYYY-MM-DD 형식, null = 현재까지)
   date_to: null
@@ -79,8 +79,8 @@ execution:
   # 초당 API 요청 수 (Rate Limiting)
   rate_limit_per_second: 3
 
-  # 페이지당 항목 수
-  page_size: 50
+  # 페이지당 항목 수 (최대 100)
+  page_size: 100
 
   # 최대 재시도 횟수
   max_retries: 3

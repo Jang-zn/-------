@@ -62,7 +62,7 @@ class AtlassianAuth:
             AuthenticationError: If authentication fails
         """
         try:
-            response = await http_client.get("/rest/api/2/myself")
+            response = await http_client.get("/rest/api/3/myself")
             user_data = response.json()
 
             logger.info(f"✓ Jira connection validated for user: {user_data.get('displayName')}")

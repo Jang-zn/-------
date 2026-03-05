@@ -107,9 +107,34 @@ user:
 
 #### Account ID 확인 방법
 
-1. Jira에 로그인
-2. 우측 상단 프로필 아이콘 → Profile
-3. 브라우저 URL 확인: `https://yourcompany.atlassian.net/people/{account_id}`
+**방법 1: API를 통한 확인 (가장 정확)**
+
+`.env` 파일을 먼저 설정한 후:
+
+```bash
+python -m src validate
+```
+
+실행하면 로그에 Account ID가 표시됩니다.
+
+**방법 2: Jira 이슈에서 확인**
+
+1. Jira에서 본인이 담당자인 아무 이슈나 열기
+2. 브라우저 개발자 도구 열기 (F12)
+3. Network 탭에서 API 호출 확인
+4. `/rest/api/2/issue/{issue-key}` 응답에서 `fields.assignee.accountId` 찾기
+
+**방법 3: Jira 사용자 검색**
+
+1. Jira에서 검색창에 `assignee = currentUser()` 입력
+2. 아무 이슈나 클릭
+3. 담당자 필드에 마우스 올리면 Account ID가 툴팁으로 표시될 수 있음
+
+**방법 4: 임시로 빈 값 사용**
+
+일단 `account_id`를 임시로 `"unknown"`으로 설정하고:
+- `validate` 명령어를 실행하면 로그에 실제 Account ID가 출력됩니다
+- 그 값을 `config.yaml`에 업데이트하세요
 
 ## 사용법
 
@@ -118,51 +143,62 @@ user:
 설정이 올바른지 확인:
 
 ```bash
-python -m src.main validate
+cd "/Users/jang/projects/utils/지라 스크래핑"
+source venv/bin/activate  # 가상 환경 활성화
+python -m src validate
 ```
 
 ### 데이터 수집
 
+**⚠️ 중요: 모든 명령어는 반드시 가상 환경을 활성화한 상태에서 실행하세요!**
+
+```bash
+cd "/Users/jang/projects/utils/지라 스크래핑"
+source venv/bin/activate  # 가상 환경 활성화 (필수!)
+```
+
 #### 전체 수집 (Jira + Confluence)
 
 ```bash
-python -m src.main scrape --all
+python -m src scrape -s all
+# 또는
+python -m src scrape  # source 기본값이 all
 ```
 
 #### Jira만 수집
 
 ```bash
-python -m src.main scrape -s jira
+python -m src scrape -s jira
 ```
 
 #### Confluence만 수집
 
 ```bash
-python -m src.main scrape -s confluence
+python -m src scrape -s confluence
 ```
 
 #### 특정 프로젝트만 수집
 
 ```bash
-python -m src.main scrape -p PROJ1,PROJ2
+python -m src scrape -p PROJ1,PROJ2
 ```
 
 #### 특정 기간만 수집
 
 ```bash
-python -m src.main scrape -f 2024-01-01 -t 2024-12-31
+python -m src scrape -f 2024-01-01 -t 2024-12-31
 ```
 
 #### 건수만 확인 (Dry Run)
 
 ```bash
-python -m src.main scrape --dry-run
+python -m src scrape --dry-run
 ```
 
 #### 중단된 수집 재개
 
 ```bash
-python -m src.main scrape --resume
+python -m src scrape --resume
 ```
 
 ### 출력 파일

@@ -171,7 +171,7 @@ class AtlassianClient:
         """
         Paginate through Jira API results.
 
-        Jira uses startAt/maxResults pagination.
+        Jira API v3 uses cursor-based pagination with nextPageToken.
 
         Args:
             endpoint: API endpoint
@@ -183,11 +183,16 @@ class AtlassianClient:
         if params is None:
             params = {}
 
-        start_at = 0
         params["maxResults"] = self.config.page_size
+        next_page_token = None
+        page_count = 0
 
         while True:
-            params["startAt"] = start_at
+            # Add nextPageToken if available
+            if next_page_token:
+                params["nextPageToken"] = next_page_token
+            elif "nextPageToken" in params:
+                del params["nextPageToken"]
 
             response = await self.get(endpoint, params=params)
             data = response.json()
@@ -198,17 +203,18 @@ class AtlassianClient:
             if not items:
                 break
 
+            page_count += 1
             for item in items:
                 yield item
 
-            # Check if there are more results
-            total = data.get("total", 0)
-            start_at += len(items)
+            # Check if there are more results (API v3 cursor-based pagination)
+            is_last = data.get("isLast", True)
+            next_page_token = data.get("nextPageToken")
 
-            if start_at >= total:
+            if is_last or not next_page_token:
                 break
 
-            logger.debug(f"Pagination: {start_at}/{total}")
+            logger.debug(f"Pagination: page {page_count}, continuing...")
 
     async def paginate_confluence(
         self,
